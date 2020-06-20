@@ -3,10 +3,10 @@ from collections import deque, defaultdict
 
 
 
-def get_player_template(T, L, num_priors):
+def get_player_template(H, L, num_priors):
 
     data = {
-        'T':                                              T,
+        'H':                                              H,
         'L':                                              L,
         'num_slopes':                                     4,
         'efc':                                         0.95,
@@ -16,11 +16,11 @@ def get_player_template(T, L, num_priors):
         'charge':                                         0,
         'dmax':                                           1.25,
         'dmin':                                           1.25,
-        'price':                            np.zeros((T,7)),
-        'load':                               np.zeros((T)),
+        'price':                            np.zeros((H,7)),
+        'load':                               np.zeros((H)),
         'allprices':                       np.zeros((L, 7)),
         'allload':                              np.zeros(L),
-        'allforecast':                          np.zeros(L),
+        'allforcast':                          np.zeros(L),
         'priors_pb':              np.zeros((num_priors, 3)),
         'priors_ps':              np.zeros((num_priors, 3)),
         'priors_qb':              np.zeros((num_priors, 3)),
@@ -49,34 +49,35 @@ PRIOR_TYPES = {
 }
 
 
-def random_player(T, D, prior_type, r, flat=False, load=None, forcast=None, solar=True):
+def random_player(H, D, prior_type, r, flat=False, load=None, forcast=None, solar=True):
 
-    L = T * D
+    DL = 48
+    L = DL * D
 
-    N_PRI, S2P, MARKUP = PRIOR_TYPES.get(prior_type)(T, D)
+    N_PRI, S2P, MARKUP = PRIOR_TYPES.get(prior_type)(DL, D)
     
     PS = 10
-    TR = 2 * (T // 3)
+    TR = 2 * (DL // 3)
     if flat:
-        PB = [30] * L
+        PB = [15] * L
     else:
-        PB = ([20] * TR + [30] * (T - TR)) * D
+        PB = ([20] * TR + [30] * (DL - TR)) * D
 
-    template = get_player_template(T, L, N_PRI)
+    template = get_player_template(H, L, N_PRI)
 
-    if load is None:
-        load = r.uniform(0, 4, L + T)
-        if solar is True:
-            for t in range(0, L + T, T):
-                tmp = r.uniform(-0.3, 0, (3 * (T // 4) - (T // 4)))
-                load[t + (T // 4): t + (3 * (T // 4))] += tmp
-    if forcast is None:
-        LO = load.reshape(-1, T)
-        forecast = np.vstack([LO[:i, :].mean(axis=0) for i in range(1, D + 1)]).flatten()
-        load = load[T:]
+    # if load is None:
+        # load = r.uniform(0, 4, L + T)
+        # if solar is True:
+            # for t in range(0, L + T, T):
+                # tmp = r.uniform(-0.3, 0, (3 * (T // 4) - (T // 4)))
+                # load[t + (T // 4): t + (3 * (T // 4))] += tmp
+    # if forcast is None:
+        # LO = load.reshape(-1, T)
+        # forecast = np.vstack([LO[:i, :].mean(axis=0) for i in range(1, D + 1)]).flatten()
+        # load = load[T:]
 
     template['allload'] = load
-    template['allforcast'] = load
+    template['allforcast'] = forcast
     template['allprices'][:, : 2] = PS
     template['allprices'][:, 2] = PB
     template['allprices'][:, 3] = PB

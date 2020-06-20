@@ -5,6 +5,8 @@ import sys
 from types import ModuleType, FunctionType
 from gc import get_referents
 
+import matplotlib as mpl
+
 # Custom objects know their class.
 # Function objects seem to know way too much, including modules.
 # Exclude modules as well.
@@ -52,6 +54,10 @@ def lazy_pickle(string):
         return wrapper
     return actual_decorator
 
+def fix_hist_step_vertical_line_at_end(ax):
+    axpolygons = [poly for poly in ax.get_children() if isinstance(poly, mpl.patches.Polygon)]
+    for poly in axpolygons:
+        poly.set_xy(poly.get_xy()[:-1])
 
 
 if __name__ == '__main__':

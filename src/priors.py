@@ -125,7 +125,7 @@ def accumulate_sample(i, data, tq, tp):
 def update_current_prior(i, data, onlyprice):
 
     index = data['slot2prior'][i]
-    freq = data.get('freq', 0)
+    freq = data.get('freq', None)
     if freq is None:
         return
     

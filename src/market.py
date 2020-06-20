@@ -73,11 +73,13 @@ class MarketInterface(pm.Market):
             return id_
 
 
-    def clear(self, method='muda', r=None):
+    def clear(self, method, r=None):
+        self.method = method
         if method=='huang':
             tr, ex = self.run(method)
         else:
             tr, ex = self.run(method, r=r)
+
 
     def get_user_result(self, user_id):
         """
@@ -94,7 +96,8 @@ class MarketInterface(pm.Market):
         if trans.shape[0] > 0:
             quantity_traded = trans.quantity.sum()
             price = trans.apply(lambda x: x.quantity * x.price, axis=1).sum()
-            price += extra['fees'][uid_]
+            if self.method == 'muda': 
+                price += extra['fees'][uid_]
             price_per_unit = price / quantity_traded if quantity_traded > 0 else 0
             if not buying:
                 quantity_traded *= -1.0

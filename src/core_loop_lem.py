@@ -24,9 +24,13 @@ def init_players(players):
 
 
 
-def core_loop(players, config, simpath):
-    
-    res_path = simpath + 'simres.pkl'
+def core_loop_lem(players, config, simpath, method):
+
+    MARKET = config.get('MARKET', True)
+    if not MARKET:
+        res_path = simpath + 'nomarket.pkl'
+    else: 
+        res_path = simpath + 'simres_{0}.pkl'.format(method)
     if os.path.exists(res_path):
         print('Simulation result already exists')
         return None
@@ -35,7 +39,6 @@ def core_loop(players, config, simpath):
     SLICE = config['SLICE']
     r = config['RANDOM_STATE']
     P = len(players)
-    MARKET = config.get('MARKET', True)
     ONLYPRICE = config.get('ONLYPRICE', False)
 
     init_players(players)
@@ -51,9 +54,11 @@ def core_loop(players, config, simpath):
             data['load'] = data['allforcast'][i : i + SLICE]
             data['load'][0] = data['allload'][i]
 
-            set_priors(i, i + SLICE, data)
+
 
             if MARKET:
+                set_priors(i, i + SLICE, data)
+
                 mo = update_problem(mo, c_, v_, data)
                 _ = mo.solve()
                 sol = cleanup_solution(mo, c_, v_, data)
@@ -70,7 +75,7 @@ def core_loop(players, config, simpath):
 
 
         if MARKET:
-            mar.clear()
+            mar.clear(method, r=r)
         for p in range(P):
 
             data = players[p]

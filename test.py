@@ -1,31 +1,63 @@
 import pickle
-from src.core_loop_lem import core_loop
+from src.core_loop_lem import core_loop_lem
 from src.create_players import create_players
 from src.core_loop_coop import core_payments, core_loop_coop
 import time
+import sys
+
+if __name__ == '__main__':
+
+    N, H, D, seed, flat, firstday, forcast_type, text = sys.argv[1:]
+    N, H, D, seed, firstday, flat, forcast_type = int(N), int(H), int(D), int(seed), int(firstday), int(flat), int(forcast_type)
+    flat = bool(flat)
 
 
-start = time.perf_counter()
 
-simpath = create_players(10, 48, 10, 1234, False, 100)
-simpath += '/'
 
-#simpath = '/home/guso/Simulations/journallem/10-48-10-1234-False-100/'
+    start = time.perf_counter()
 
-with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    #simpath = create_players(50, 48, 5, 1234, True, 150, '4')
+    simpath = create_players(N, H, D, seed, flat, firstday, forcast_type, text)
+    simpath += '/'
 
-res = core_loop(players, config, simpath)
 
-with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    ### Cooperative with rolling horizon
+    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
-core_loop = core_loop_coop(players, config, simpath)
+    res = core_loop_coop(players, config, simpath)
 
-with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
-core_payoffs = core_payments(players, config, simpath)
+    ## Core payments with perfect information
+    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
-elapsed = time.perf_counter() - start
-print('Elapsed time', elapsed)
+    core_payments(players, config, simpath)
+
+    ### Market simulation with MUDA
+
+    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+
+    core_loop_lem(players, config, simpath, 'muda')
+
+    ### Market simulation with P2P
+
+    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+
+    core_loop_lem(players, config, simpath, 'p2p')
+
+    ### Simulation without market
+
+    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+
+    config['MARKET'] = False
+    core_loop_lem(players, config, simpath, 'nomarket')
+
+
+    ### The END
+
+    elapsed = time.perf_counter() - start
+    print('Elapsed time', elapsed)

@@ -127,7 +127,7 @@ def build_price(prices, num_slopes):
 def init_problem(data, neginf=-1e5):
 
     model = cpx.Model(name="MIP Model")
-    T = data['T']
+    T = data['H']
     NS = data['num_slopes']
     EC, ED = (1 / data['efc']), data['efd']
     LOAD = data['load']
@@ -196,7 +196,7 @@ def init_problem(data, neginf=-1e5):
 
 def update_problem(model, CONS, VARS, data, EPS=1e-5):
 
-    T, NS = data['T'], data['num_slopes']
+    T, NS = data['H'], data['num_slopes']
     EC, ED = (1 / data['efc']), data['efd']
     LOAD = data['load']
 
