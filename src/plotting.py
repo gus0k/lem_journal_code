@@ -3,19 +3,20 @@ import pickle
 import matplotlib.pyplot as plt
 from src.create_players import create_players
 import time
+import math
 from config import *
 
 from pathlib import Path
 from src.utils import fix_hist_step_vertical_line_at_end
 
 import matplotlib
-#matplotlib.use('pgf'),
-# matplotlib.rcParams.update({
-    # 'pgf.texsystem': 'pdflatex',
-    # 'font.family': 'serif',
-    # 'text.usetex': True,
-    # 'pgf.rcfonts': False,
-# }),
+matplotlib.use('pgf'),
+matplotlib.rcParams.update({
+    'pgf.texsystem': 'pdflatex',
+    'font.family': 'serif',
+    'text.usetex': True,
+    'pgf.rcfonts': False,
+}),
 
 def process_sim(simpath):
 
@@ -116,7 +117,9 @@ def generate_figures(sims, flat='True', forcast='0'):
 
 
     BINS = 20
-    FIGSIZE = (12, 10)
+    WIDTH = 3.5
+    FIGSIZE = (WIDTH, WIDTH * 2 / (1 + math.sqrt(5)))
+
     fig_cost, ax = plt.subplots(figsize=FIGSIZE)
     
 
@@ -155,6 +158,6 @@ if __name__ == '__main__':
     combs = [('True', '0'), ('True', '1'), ('False', '0'), ('False', '1')]
     for flat, forcast in combs:
         fl, fc = generate_figures(sims, flat, forcast)
-        fl.savefig('img/fl{}{}.png'.format(flat, forcast))
-        fc.savefig('img/fc{}{}.png'.format(flat, forcast))
+        fl.savefig('img/fl{}{}.pgf'.format(flat, forcast))
+        fc.savefig('img/fc{}{}.pgf'.format(flat, forcast))
 
