@@ -14,11 +14,12 @@ from itertools import product
 
 from config import *
 
-def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, aux=''):
+def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, cant_bats=None, aux=''):
     print(real_data)
 
+
     pt = 'solar'
-    filename = map(str, [N, H, D, seed, flat, real_data, forcast_type])
+    filename = map(str, [N, H, D, seed, flat, real_data, forcast_type, cant_bats])
     filename = '-'.join(filename) + '_{0}'.format(aux)
     file_path = SIMULATION_PARAMETERS + '/' + filename
 
@@ -40,6 +41,11 @@ def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, aux=
     data_solar_forcast = pd.read_csv(DATA_SOLAR_FORCAST, index_col='date', parse_dates=True)
     dfs_solar = [data_solar, data_solar_forcast]
 
+
+    if cant_bats is None:
+        cant_bats = N
+    players_with_bats = r.choice(range(N), size=cant_bats, replace=False)
+
     players = {}
     for n in range(N):
         has_solar = n <= (N // 2)
@@ -56,6 +62,11 @@ def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, aux=
 
     for p in range(N):
         players[p]['freq'] = None # Players won't update their beliefs
+
+    for p in players_with_bats:
+        players[p]['bmax'] = 13.5
+        players[p]['dmax'] = 1.25
+        players[p]['dmin'] = 1.25
 
     players_path = file_path + '/players.pkl'
     with open(players_path, 'wb') as fh:

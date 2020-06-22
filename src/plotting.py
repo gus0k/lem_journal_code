@@ -23,9 +23,9 @@ def process_sim(simpath):
     params = simpath.split('/')[-2]
     params, name = params.split('_')
     params = params.split('-')
-    if len(params) != 7:
+    if len(params) != 8:
         return None
-    N, H, D, seed, flat, fd, forcast = params
+    N, H, D, seed, flat, fd, forcast, cant_bats = params
 
     with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
     with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)

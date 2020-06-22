@@ -7,8 +7,8 @@ import sys
 
 if __name__ == '__main__':
 
-    N, H, D, seed, flat, firstday, forcast_type, text = sys.argv[1:]
-    N, H, D, seed, firstday, flat, forcast_type = int(N), int(H), int(D), int(seed), int(firstday), int(flat), int(forcast_type)
+    N, H, D, seed, flat, firstday, forcast_type, cant_bats, text = sys.argv[1:]
+    N, H, D, seed, firstday, flat, forcast_type, cant_bats = int(N), int(H), int(D), int(seed), int(firstday), int(flat), int(forcast_type), int(cant_bats)
     flat = bool(flat)
 
 
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     start = time.perf_counter()
 
     #simpath = create_players(50, 48, 5, 1234, True, 150, '4')
-    simpath = create_players(N, H, D, seed, flat, firstday, forcast_type, text)
+    simpath = create_players(N, H, D, seed, flat, firstday, forcast_type, cant_bats, text)
     simpath += '/'
 
 
