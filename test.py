@@ -4,6 +4,9 @@ from src.create_players import create_players
 from src.core_loop_coop import core_payments, core_loop_coop
 import time
 import sys
+import os 
+
+os.environ["TMP"] = os.path.expanduser('~/tmp/')
 
 if __name__ == '__main__':
 
