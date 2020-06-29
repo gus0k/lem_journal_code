@@ -10,13 +10,13 @@ from pathlib import Path
 from src.utils import fix_hist_step_vertical_line_at_end
 
 import matplotlib
-# matplotlib.use('pgf'),
-# matplotlib.rcParams.update({
-    # 'pgf.texsystem': 'pdflatex',
-    # 'font.family': 'serif',
-    # 'text.usetex': True,
-    # 'pgf.rcfonts': False,
-# }),
+matplotlib.use('pgf'),
+matplotlib.rcParams.update({
+     'pgf.texsystem': 'pdflatex',
+     'font.family': 'serif',
+     'text.usetex': True,
+     'pgf.rcfonts': False,
+ }),
 
 def process_sim(simpath):
 
@@ -100,7 +100,7 @@ def generate_figures(sims, N, cantbats, flat='True', forcast='0'):
     data_keys = ['cost', 'netload']
 
     KEYS_SIMNAMES = ['perf', 'coop', 'muda', 'p2p']
-    KEYS_SIM_LONG = ['Cooperative perfect', 'Cooperative iterative', 'Non-coop MUDA', 'Non-coop P2P ']
+    KEYS_SIM_LONG = ['Coop perfect', 'Coop rolling', 'Non-coop Auction', 'Non-coop P2P ']
 
     for ss in sims:
         par = ss.split('/')[-2]
@@ -115,7 +115,7 @@ def generate_figures(sims, N, cantbats, flat='True', forcast='0'):
                 for i, d_ in enumerate(data):
                     tmp = res[data_keys[i]]
                     for j, key in enumerate(KEYS_SIMNAMES):
-                        val = round(tmp[key] / tmp['nomr'] * 100, 1)
+                        val = round(tmp[key] / tmp['nomr'] * 100, 1) - 100
                         d_[j].append(val)
 
 
@@ -128,43 +128,52 @@ def generate_figures(sims, N, cantbats, flat='True', forcast='0'):
 
 
     BINS = 20
-    WIDTH = 10
-    FIGSIZE = (WIDTH, WIDTH * 2 / (1 + math.sqrt(5)))
+    WIDTH = 5
+    FIGSIZE = (WIDTH, WIDTH * 1.2)
 
-    fig_cost, ax = plt.subplots(figsize=FIGSIZE)
+    fig_cost, ax = plt.subplots(2, 1, figsize=FIGSIZE)
     
 
     for i, d_ in enumerate(data_cost):
         label = KEYS_SIM_LONG[i]
-        ax.hist(d_, BINS, density=True, histtype='step', cumulative=True, label=label)
+        ax[0].hist(d_, BINS, density=True, histtype='step', cumulative=True, label=label)
 
-    fix_hist_step_vertical_line_at_end(ax)
-    ax.legend()
-    ax.set_xlabel('% smaller than to no interaction')
-    ax.set_ylabel('Fraction of simulations')
-    ax.set_title('Cost' + title_string)
-    ax.legend()
-    fig_cost.tight_layout()
+    fix_hist_step_vertical_line_at_end(ax[0])
+    # ax.legend()
+    # ax.set_xlabel('% of change')
+    # ax.set_ylabel('Fraction of simulations')
+    ax[0].set_title('Cost')
+    ax[0].legend(loc='upper center', bbox_to_anchor=(0.5, 1.4),
+          ncol=2, fancybox=True, shadow=True)
+    # fig_cost.tight_layout()
 
 
-    fig_load, ax = plt.subplots(figsize=FIGSIZE)
+    # fig_load, ax = plt.subplots(figsize=FIGSIZE)
 
     for i, d_ in enumerate(data_load):
         label = KEYS_SIM_LONG[i]
-        ax.hist(d_, BINS, density=True, histtype='step', cumulative=True, label=label)
+        ax[1].hist(d_, BINS, density=True, histtype='step', cumulative=True, label=label)
 
-    fix_hist_step_vertical_line_at_end(ax)
-    ax.set_xlabel('% smaller than to no interaction')
-    ax.set_ylabel('Fraction of simulations')
-    ax.set_title('Energy exchanged with the grid' + title_string)
-    ax.legend()
-    fig_load.tight_layout()
+    fix_hist_step_vertical_line_at_end(ax[1])
+    ax[1].set_xlabel('% of change with respect to no local matching')
+    ax[1].set_title('Exchanged energy')
+    # ax[1].set_ylabel('Fraction of simulations')
+    # ax.set_title()
+    # ax[1].legend(loc='upper center', bbox_to_anchor=(0.5, 1.30),
+          # ncol=2, fancybox=True, shadow=True)
+    
+    # fig_cost.text(0.5, 0.0, '% of change with respect to no local matching', ha='center', va='center')
+    fig_cost.text(0.01, 0.5, 'Fraction of simulations', ha='center', va='center', rotation='vertical')
+    fig_cost.tight_layout()
 
-    return fig_load, fig_cost
+
+    return fig_cost, fig_cost
            
 
 if __name__ == '__main__':
     sims = [str(s) + '/' for s in Path(SIMULATION_PARAMETERS).glob('*complete')]
+
+    FIGPATH = '/home/guso/github/journal_tex/figures'
 
     list_of_keys = set()
     for ss in sims:
@@ -173,11 +182,13 @@ if __name__ == '__main__':
         par = par.split('-')
         key = (par[0], par[7], par[4], par[6])
         list_of_keys.add(key)
-    print(list_of_keys)
+    #print(list_of_keys)
+
+    list_of_keys = [('50', '50', 'False', '1')]
 
     # combs = [('True', '0'), ('True', '1'), ('False', '0'), ('False', '1')]
     for N, cantbats, flat, forcast in list_of_keys:
         fl, fc = generate_figures(sims, N, cantbats, flat, forcast)
-        fl.savefig('img/fl_{}_{}_{}_{}.png'.format(N, cantbats, flat, forcast))
-        fc.savefig('img/fc_{}_{}_{}_{}.png'.format(N, cantbats, flat, forcast))
+        fl.savefig(FIGPATH + '/fl_{}_{}_{}_{}.pgf'.format(N, cantbats, flat, forcast))
+        fc.savefig(FIGPATH + '/fc_{}_{}_{}_{}.pgf'.format(N, cantbats, flat, forcast))
 
