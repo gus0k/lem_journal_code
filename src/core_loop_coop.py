@@ -86,6 +86,7 @@ def core_loop_coop(players, config, simpath):
     cost = np.zeros(ROUNDS)
 
     for i in range(ROUNDS):
+        print(f'Round: {i} / {ROUNDS}\r', end="")
 
         player_list = []
         for p in range(P):

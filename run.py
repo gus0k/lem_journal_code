@@ -28,28 +28,29 @@ if __name__ == '__main__':
     with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
     with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
+    print(config)
     res = core_loop_coop(players, config, simpath)
 
 
     ## Core payments with perfect information
-    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    # with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    # with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
-    core_payments(players, config, simpath)
+    # core_payments(players, config, simpath)
 
     ### Market simulation with MUDA
 
-    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    # with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    # with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
-    core_loop_lem(players, config, simpath, 'muda')
+    # core_loop_lem(players, config, simpath, 'muda')
 
     ### Market simulation with P2P
 
-    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    # with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    # with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
-    core_loop_lem(players, config, simpath, 'p2p')
+    # core_loop_lem(players, config, simpath, 'p2p')
 
     ### Simulation without market
 

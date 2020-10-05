@@ -1,6 +1,8 @@
 import numpy as np
 from collections import deque, defaultdict
 
+from config import DL
+
 
 
 def get_player_template(H, L, num_priors):
@@ -51,12 +53,12 @@ PRIOR_TYPES = {
 
 def random_player(H, D, prior_type, r, flat=False, load=None, forcast=None, solar=True):
 
-    DL = 48
+    
     L = DL * D
 
     N_PRI, S2P, MARKUP = PRIOR_TYPES.get(prior_type)(DL, D)
     
-    PS = 10
+    PS = 2
     TR = 2 * (DL // 3)
     if flat:
         PB = [15] * L

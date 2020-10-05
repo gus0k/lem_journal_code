@@ -1,8 +1,11 @@
 import pulp as plp
 import pandas as pd
 import numpy as np
+import pdb
 
 from src.player_coop import Player
+from IPython.core.debugger import set_trace
+
 
 from config import *
 
@@ -144,6 +147,8 @@ def solve_centralized(player_list, buying_price, selling_price):
     model.setObjective(objective)
 
     model.solve(solver)
+
+
 
     opt_val = objective.value()
 

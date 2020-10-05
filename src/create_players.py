@@ -9,13 +9,10 @@ from src.utils import lazy_pickle
 from src.process_data import get_data
 from itertools import product
 
-#from json_tricks import dump, dumps, load, loads, strip_comments
-
-
 from config import *
 
+
 def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, cant_bats=None, aux=''):
-    print(real_data)
 
 
     pt = 'solar'
@@ -50,7 +47,7 @@ def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, cant
     for n in range(N):
         has_solar = n <= (N // 2)
         DFS = dfs_solar if has_solar else dfs_nosolar
-        if real_data > 0:
+        if real_data >= 0:
             load_ = get_data(n, real_data, D, DFS[0])
             forcast_ = get_data(n, real_data, D, DFS[forcast_type])
         else:
@@ -64,16 +61,15 @@ def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, cant
         players[p]['freq'] = None # Players won't update their beliefs
 
     for p in players_with_bats:
-        players[p]['bmax'] = 13.5
-        players[p]['dmax'] = 1.25
-        players[p]['dmin'] = 1.25
+        players[p]['bmax'] = BATTERY_CAPACITY
+        players[p]['dmax'] = RAMP_UP / TIMESLOTS_HOUR
+        players[p]['dmin'] = RAMP_DOWN / TIMESLOTS_HOUR
 
     players_path = file_path + '/players.pkl'
     with open(players_path, 'wb') as fh:
         pickle.dump(players, fh)
 
     config_path = file_path + '/sim_config.pkl'
-    DL = 48
     CONFIG = {
             'ROUNDS': DL * D - H + 1,
             'SLICE': H,
