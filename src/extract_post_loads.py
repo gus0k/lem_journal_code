@@ -4,9 +4,9 @@ from config import SIMULATION_PARAMETERS, TIMESLOTS_HOUR
 from pathlib import Path
 
 
-sim_spec = '50-48-6-2210-True-0-0-25_first_windows'
-simpath = Path(SIMULATION_PARAMETERS) / sim_spec
-OUT = Path('~/Simulations').expanduser()
+select = 0
+
+simpath = list(SIMULATION_PARAMETERS.glob('*'))[1]
 
 
 with open(simpath / 'players.pkl', 'rb') as fh: players = pickle.load(fh)
@@ -94,7 +94,7 @@ print(cost_coop)
 
 
 
-np.savetxt(OUT / 'nobat.csv', net_nobat, delimiter=',')
-np.savetxt(OUT / 'indiv.csv', net_indiv, delimiter=',')
-np.savetxt(OUT / 'coop.csv', net_coop,  delimiter=',')
+np.savetxt(simpath / 'nobat.csv', net_nobat, delimiter=',')
+np.savetxt(simpath / 'indiv.csv', net_indiv, delimiter=',')
+np.savetxt(simpath / 'coop.csv', net_coop,  delimiter=',')
 

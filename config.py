@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-SIMULATION_PARAMETERS = str(Path('~/Simulations/lec').expanduser())
+SIMULATION_PARAMETERS = Path('~/Simulations/lec').expanduser()
 
 if not os.path.isdir(SIMULATION_PARAMETERS):
     os.makedirs(SIMULATION_PARAMETERS)

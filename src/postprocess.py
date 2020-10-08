@@ -9,7 +9,7 @@ from config import *
 
 from pathlib import Path
 
-sims = [str(s) + '/' for s in Path(SIMULATION_PARAMETERS).glob('*')]
+sims = [str(s) + '/' for s in SIMULATION_PARAMETERS.glob('*')]
 for x in enumerate(sims): print(x)
 
 if __name__ == '__main__':

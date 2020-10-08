@@ -18,7 +18,7 @@ def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, cant
     pt = 'solar'
     filename = map(str, [N, H, D, seed, flat, real_data, forcast_type, cant_bats])
     filename = '-'.join(filename) + '_{0}'.format(aux)
-    file_path = SIMULATION_PARAMETERS + '/' + filename
+    file_path = SIMULATION_PARAMETERS / filename
 
     if not os.path.isdir(file_path):
         os.makedirs(file_path)

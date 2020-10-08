@@ -171,7 +171,7 @@ def generate_figures(sims, N, cantbats, flat='True', forcast='0'):
            
 
 if __name__ == '__main__':
-    sims = [str(s) + '/' for s in Path(SIMULATION_PARAMETERS).glob('*complete')]
+    sims = [str(s) + '/' for s in SIMULATION_PARAMETERS.glob('*complete')]
 
     FIGPATH = '/home/guso/github/journal_tex/figures'
 
