@@ -28,7 +28,7 @@ def core_loop_lem(players, config, simpath, method):
 
     MARKET = config.get('MARKET', True)
     if not MARKET:
-        res_path = simpath + 'nomarket.pkl'
+        res_path = simpath / 'nomarket.pkl'
     else: 
         res_path = simpath + 'simres_{0}.pkl'.format(method)
     if os.path.exists(res_path):

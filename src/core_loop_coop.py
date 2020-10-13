@@ -20,7 +20,7 @@ def init_players(players):
 
 def core_payments(players, config, simpath):
 
-    res_path = simpath + 'core_payments.pkl'
+    res_path = simpath / 'core_payments.pkl'
     if os.path.exists(res_path):
         print('Simulation result already exists')
         return None
@@ -71,7 +71,7 @@ def core_payments(players, config, simpath):
 
 def core_loop_coop(players, config, simpath):
 
-    res_path = simpath + 'coop_loop_res.pkl'
+    res_path = simpath / 'coop_loop_res.pkl'
     if os.path.exists(res_path):
         print('Simulation result already exists')
         return None

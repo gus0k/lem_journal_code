@@ -4,9 +4,9 @@ from config import SIMULATION_PARAMETERS, TIMESLOTS_HOUR
 from pathlib import Path
 
 
-select = 0
+select = 4
 
-simpath = list(SIMULATION_PARAMETERS.glob('*'))[1]
+simpath = list(SIMULATION_PARAMETERS.glob('*'))[select]
 
 
 with open(simpath / 'players.pkl', 'rb') as fh: players = pickle.load(fh)

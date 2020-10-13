@@ -65,13 +65,14 @@ def create_players(N, H, D, seed, flat=False, real_data=-1, forcast_type=0, cant
         players[p]['dmax'] = RAMP_UP / TIMESLOTS_HOUR
         players[p]['dmin'] = RAMP_DOWN / TIMESLOTS_HOUR
 
-    players_path = file_path + '/players.pkl'
+    players_path = file_path / 'players.pkl'
+    print(players_path)
     with open(players_path, 'wb') as fh:
         pickle.dump(players, fh)
 
-    config_path = file_path + '/sim_config.pkl'
+    config_path = file_path / 'sim_config.pkl'
     CONFIG = {
-            'ROUNDS': DL * D - H + 1,
+            'ROUNDS': L - H + 1,
             'SLICE': H,
             'RANDOM_STATE': r,
             'MARKET': True,

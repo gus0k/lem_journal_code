@@ -21,12 +21,12 @@ if __name__ == '__main__':
 
     #simpath = create_players(50, 48, 5, 1234, True, 150, '4')
     simpath = create_players(N, H, D, seed, flat, firstday, forcast_type, cant_bats, text)
-    simpath += '/'
+    simpath
 
 
     ### Cooperative with rolling horizon
-    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    with open(simpath / 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath / 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
     print(config)
     res = core_loop_coop(players, config, simpath)
@@ -54,8 +54,8 @@ if __name__ == '__main__':
 
     ### Simulation without market
 
-    with open(simpath + 'players.pkl', 'rb') as fh: players = pickle.load(fh)
-    with open(simpath + 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
+    with open(simpath / 'players.pkl', 'rb') as fh: players = pickle.load(fh)
+    with open(simpath / 'sim_config.pkl', 'rb') as fh: config = pickle.load(fh)
 
     config['MARKET'] = False
     core_loop_lem(players, config, simpath, 'nomarket')

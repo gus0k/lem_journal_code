@@ -1,7 +1,7 @@
 import numpy as np
 from collections import deque, defaultdict
 
-from config import DL
+from config import DL, L
 
 
 
@@ -54,9 +54,11 @@ PRIOR_TYPES = {
 def random_player(H, D, prior_type, r, flat=False, load=None, forcast=None, solar=True):
 
     
-    L = DL * D
+    #L = int(DL * D)
 
-    N_PRI, S2P, MARKUP = PRIOR_TYPES.get(prior_type)(DL, D)
+    #N_PRI, S2P, MARKUP = PRIOR_TYPES.get(prior_type)(DL, D)
+    N_PRI, S2P, MARKUP = 1, np.zeros(L).astype(int), 0.1
+
     
     PS = 2
     TR = 2 * (DL // 3)

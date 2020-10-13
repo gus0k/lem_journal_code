@@ -24,6 +24,8 @@ python run.py 50 48 6 2210 1 0 0 25 first_windows
 
 Later, to generate the three different cases: no bat, individual, cooperative run
 
+edit the select parameter to change the simulation to extract
+
 ```sh
 python src\extract_post_loads.py
 ```
