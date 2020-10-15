@@ -31,7 +31,9 @@ for pl in players:
     ec, ed = clp['efc'], clp['efd']
     bat    = np.array([
         x / ec if x >=0 else x * ed for x in clp['history_bat']])
+    print(pl, min(bat), max(bat), clp['bmax'])
     net = bat + clp['allload']
+    net = net[:ROUNDS]
     charge_coop += clp['charge']
     net_coop.append(net)
 
